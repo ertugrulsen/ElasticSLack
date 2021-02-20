@@ -13,7 +13,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - /home/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - 9200:9200
     networks:
@@ -24,7 +24,7 @@ services:
     hostname: logstash
     command: -f /etc/logstash/conf.d/
     volumes:
-      - /home/logstash/:/etc/logstash/conf.d/
+      - ./logstash/:/etc/logstash/conf.d/
     ports:
       - "5000:5000"
     environment:
@@ -38,7 +38,7 @@ services:
     container_name: kibana
     hostname: kibana
     volumes:
-      - /home/kibana/:/usr/share/kibana/config/
+      - ./kibana/:/usr/share/kibana/config/
     ports:
       - "5601:5601"
     networks:
@@ -47,9 +47,9 @@ services:
       - elasticsearch
 
 volumes:
-  /home/elasticsearch:
-  /home/logstash:
-  /home/kibana:
+  elasticsearch:
+  logstash:
+  kibana:
 
 networks:
   elknetwork:
