@@ -6,12 +6,18 @@ services:
     container_name: elasticsearch
     hostname: elasticsearch
     volumes:
-      - tmp/elasticsearch:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - "9200:9200"
       - "9300:9300"
     environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
     networks:
         - elknetwork
   logstash:
@@ -20,7 +26,7 @@ services:
     hostname: logstash
     command: -f /etc/logstash/conf.d/
     volumes:
-      - tmp/logstash/:/etc/logstash/conf.d/
+      - ./logstash/:/etc/logstash/conf.d/
     ports:
       - "5000:5000"
     environment:
@@ -34,13 +40,19 @@ services:
     container_name: kibana
     hostname: kibana
     volumes:
-      - tmp/kibana/:/usr/share/kibana/config/
+      - ./kibana/:/usr/share/kibana/config/
     ports:
       - "5601:5601"
     networks:
         - elknetwork
     depends_on:
       - elasticsearch
+
+volumes:
+    elasticsearch: {}
+    logstash: {}
+    kibana:{}
+    
 networks:
      elknetwork:
             driver: bridge
