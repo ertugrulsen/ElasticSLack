@@ -7,7 +7,7 @@ services:
     environment:
       - "discovery.type=single-node"
     volumes:
-      - elasticsearch:/usr/share/elasticsearch/data
+      - elasticsearch:/usr/share/elasticsearch/config/elasticsearch.yaml
     ports:
       - 9200:9200
     networks:
